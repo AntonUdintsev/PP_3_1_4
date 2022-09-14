@@ -1,27 +1,26 @@
 package com.example.pp_3_1_2.controller;
 
 
+
 import com.example.pp_3_1_2.model.User;
-import com.example.pp_3_1_2.service.UserService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
-
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/")
 public class UserController {
-	private final UserService userService;
 
-
-	public UserController(UserService userService) {
-		this.userService = userService;
+	@GetMapping(value = "login")
+	public String loginPage() {
+		return "users/login";
 	}
 
-	@GetMapping("/user")
-	public String printUser(ModelMap model, Principal principal) {
-		model.addAttribute("user", userService.findByName(principal.getName()));
-		return "/user";
+	@GetMapping("user")
+	public String showUserInfo(@AuthenticationPrincipal User user, Model model) {
+		model.addAttribute("user", user);
+		return "users/userPage";
 	}
 }

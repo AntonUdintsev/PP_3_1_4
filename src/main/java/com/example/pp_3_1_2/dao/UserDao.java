@@ -7,11 +7,15 @@ import com.example.pp_3_1_2.model.User;
 import java.util.List;
 
 public interface UserDao {
-    public List<User> getUsers();
-    public void addUser (User user);
-    public  User showUser (int id);
-    public void updateUser (int id, User user);
-    public void deleteUser (int id);
-    public User findByName (String name);
+    void saveUser(User user);
 
+    void updateUser(User user);
+
+    void deleteUser(long id);
+
+    List<User> getAllUsers();
+
+    User getUserByEmail(String login);
+
+    User getUserById(long id);
 }

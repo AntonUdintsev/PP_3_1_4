@@ -1,100 +1,110 @@
 package com.example.pp_3_1_2.model;
 
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table (name = "users_data")
-
+@Table(name = "users")
 public class User implements UserDetails {
-
     @Id
-    @Column (name = "id")
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column (name = "userName")
-    private String userName;
-    @Column (name = "userSurname")
-    private String userSurname;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    @Column (name = "userPassword",nullable = false)
-    private String userPassword;
+    @Column(name = "name")
+    private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @Column(name = "surname")
+    private String surname;
 
-    private Set<Role> roles;
+    @Column(name = "age")
+    private int age;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "password")
+    private String password;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", userSurname='" + userSurname + '\'' +
-                ", userPassword='" + userPassword + '\'' +
-                ", roles=" + roles +
-                '}';
+    public User(String name, String surname, int age, String email, String password, Set<Role> roles) {
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public String getName() {
+        return name;
     }
 
-    public String getUserSurname() {
-        return userSurname;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setUserSurname(String userSurname) {
-        this.userSurname = userSurname;
+    public String getSurname() {
+        return surname;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public int getAge() {
+        return age;
     }
-    public void setUserPassword (String password) {this.userPassword = password;}
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+        return roles;
     }
 
-    @Override
     public String getPassword() {
-        return userPassword;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return userName;
+        return email;
     }
-
 
     @Override
     public boolean isAccountNonExpired() {
@@ -114,5 +124,28 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", age=" + age +
+                ", email='" + email + '\'' +
+                '}';
     }
 }
