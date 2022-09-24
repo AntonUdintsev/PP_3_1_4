@@ -3,7 +3,6 @@ package com.example.pp_3_1_2.service;
 
 import com.example.pp_3_1_2.dao.UserDao;
 import com.example.pp_3_1_2.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +18,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     @Lazy
     public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
@@ -36,7 +34,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void updateUser(User user) {
-        if (!user.getPassword().equals(userDao.getUserById(user.getId()).getPassword())) {
+        if (!user.getPassword().equals(userDao.getUserById(user.getUserId()).getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         userDao.updateUser(user);
@@ -64,7 +62,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userDao.getUserByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userDao.getUserByEmail(username);
     }
 }

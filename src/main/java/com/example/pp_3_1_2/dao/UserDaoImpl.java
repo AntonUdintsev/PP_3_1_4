@@ -35,13 +35,13 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        return entityManager.createQuery("select u from User u", User.class).getResultList();
+        return entityManager.createQuery("select u from User u JOIN FETCH u.roles", User.class).getResultList();
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        return entityManager.createQuery("select u from User u where u.email =: email", User.class)
-                .setParameter("email", email).getSingleResult();
+    public User getUserByEmail(String username) {
+        return entityManager.createQuery("select u from User u JOIN FETCH u.roles where u.username =: username", User.class)
+                .setParameter("username", username).getSingleResult();
     }
 
     @Override
