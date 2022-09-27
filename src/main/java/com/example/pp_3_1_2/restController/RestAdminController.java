@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/admin")
 public class RestAdminController {
 
     private final UserService userService;
@@ -56,10 +56,10 @@ public class RestAdminController {
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<User> getUserByUsername (@AuthenticationPrincipal User user) {
-        return new ResponseEntity<>(user,HttpStatus.OK);
-    }
+//    @GetMapping("/user")
+//    public ResponseEntity<User> getUserByUsername (@AuthenticationPrincipal User user) {
+//        return new ResponseEntity<>(user,HttpStatus.OK);
+//    }
 
     @PutMapping("/users/{id}")
     public ResponseEntity<ExceptionInfo> pageEdit(@PathVariable("id") long id,
